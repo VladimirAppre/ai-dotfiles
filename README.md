@@ -139,7 +139,7 @@ No. There's no installer that touches your system — you take what you want fro
 
 ## Philosophy
 
-> ### You don't *configure* an assistant. You *engineer* one.
+> ### Engineer the rules once — so your attention belongs to the *goal*, not the *settings*.
 
 Most setups treat AI rules as throwaway preferences — a `.cursorrules` here, a system prompt there, copy-pasted and forgotten. This repo treats them as what they really are: **the source code of how your assistant thinks, remembers, and acts.** Build them with the care you'd give real code, and the assistant stops being clever autocomplete and starts being a teammate that holds the line.
 
