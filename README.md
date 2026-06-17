@@ -6,7 +6,7 @@
 
 It's not a blank `.cursorrules` to fill in. Under the hood is a worked-out system — **principles, memory, and a safe workflow** — kept as one source of truth that syncs to both tools and grows with you. No more drifting configs, no more re-explaining context to an assistant that forgot where you left off. Sysadmin runbooks for macOS and your servers come along for the ride — but the real product is *how your assistant works with you*.
 
-[⚡ Quick Start](#quick-start) · [🚀 Why it's different](#why-its-different) · [📦 What's inside](#whats-inside) · [🧭 Philosophy](#philosophy) · [❓ FAQ](#faq)
+[⚡ Quick Start](#quick-start) · [🚀 Why it's different](#why-its-different) · [📦 What's inside](#whats-inside) · [🧭 Philosophy](#philosophy) · [❓ FAQ](#faq) · [⚖️ License](LICENSE)
 
 </div>
 
@@ -36,8 +36,8 @@ Your `CLAUDE.md` and `.cursorrules` are dotfiles too — the config that shapes 
 
 ### 🔄 Same AI rules in Claude Code *and* Cursor — no copy-paste, no drift
 
-![Claude Code](https://img.shields.io/badge/Claude_Code-ready-D97757?logo=anthropic&logoColor=white)
-![Cursor](https://img.shields.io/badge/Cursor-ready-000000?logo=cursor&logoColor=white)
+[![Claude Code](https://img.shields.io/badge/Claude_Code-ready-D97757?logo=anthropic&logoColor=white)](https://claude.com/claude-code)
+[![Cursor](https://img.shields.io/badge/Cursor-ready-000000?logo=cursor&logoColor=white)](https://cursor.com)
 
 Stop maintaining `CLAUDE.md` and `.cursorrules` by hand and watching them fall out of sync. Here you edit **one file**, run one command, and both tools get identical behavior:
 
@@ -110,10 +110,6 @@ _memory_template.md    Template for the assistant's persistent memory files
 ---
 
 ## Platform support
-
-![macOS](https://img.shields.io/badge/macOS-primary-black?logo=apple&logoColor=white)
-![Ubuntu](https://img.shields.io/badge/Ubuntu-server-orange?logo=ubuntu&logoColor=white)
-![Shell](https://img.shields.io/badge/shell-fish-2496ED?logo=gnu-bash&logoColor=white)
 
 | Platform | Status | Use case |
 |----------|--------|----------|
