@@ -1,0 +1,48 @@
+# Secrets & credentials
+.env
+.env.*
+!.env.example
+*.secret
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa
+id_ed25519
+id_rsa_*
+*.crt
+
+# Local machine-specific (never share — stays on each machine)
+SYSTEM.md
+machines/
+
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Editor
+.vscode/
+*.iml
+
+# Local notes (not for sharing)
+*.local.md
+local/
+
+# OS
+__MACOSX/
+
+# Personal task logs — ship the template + empty structure, not the contents
+tasks/active/*
+tasks/done/*
+!tasks/active/.gitkeep
+!tasks/done/.gitkeep
+
+# Override global gitignore: track Cursor rules (not sensitive)
+!.cursor/
+!.cursor/rules/
+!.cursor/rules/*.mdc
+
+# Claude Code local files — never tracked or pushed (machine-specific, absolute paths)
+.claude/

@@ -1,0 +1,147 @@
+---
+description: Core rules — how the assistant works in this project (always on).
+alwaysApply: true
+---
+
+<!-- Generated from CLAUDE.md by scripts/sync-rules.sh — do not edit directly. -->
+
+# Terminal Configuration Project
+
+Terminal config, system setup, and remote server administration — dotfiles, shell config, system settings, SSH, package management, server admin.
+
+**Local machine:** macOS. **Remote:** Linux servers (via SSH).
+
+---
+
+## Context Recovery
+
+If context was compressed: re-read this file and run Session Start — resume the active task from its "Last Checkpoint".
+
+---
+
+## Document Roles
+
+| Document | Owns |
+|----------|------|
+| `CLAUDE.md` | Rules for how Claude works in this project |
+| `docs/decisions.md` | Non-obvious decisions with Why notes |
+| `tasks/` | In-progress and completed task files |
+| `modules/<name>.md` | Domain rules + the files they own, loaded on demand (see Modules) |
+
+---
+
+## Modules
+
+Load on demand — read the module only when the task matches:
+
+| Module | Load when |
+|--------|-----------|
+| `modules/sysadmin.md` | terminal, system config, package management, SSH, daemons, or server admin |
+
+---
+
+## Engineering Principles
+
+Apply to every change — the *why* behind the workflow below. **Conflict rule: if any project rule or module ever contradicts a principle, the principle wins — treat it as a signal to fix the rule, not a license to bypass it.**
+
+1. **Think before coding.** Don't assume — state assumptions, surface tradeoffs, ask when unclear. If interpretations differ, present them; don't pick silently. Push back when a simpler path exists.
+2. **Simplicity first.** Minimum that solves the problem — no speculative features, no abstractions for single use, no handling for impossible cases. If 200 lines could be 50, rewrite it. No hacks: if a fix feels like a workaround, stop and find the proper way.
+3. **Surgical changes.** Touch only what the task requires. Don't refactor, reformat, or "improve" adjacent code. Match existing style. Remove only orphans your own change created; flag pre-existing dead code, don't delete it. Before reporting "done": confirm related files stay consistent and grep for stale references after any rename/removal.
+4. **Goal-driven.** Define a verifiable success criterion before starting, then loop until met (e.g. write the failing check first, then make it pass).
+5. **Honesty.** Never fabricate to avoid "I don't know." State known vs. assumed; verify before claiming something works.
+
+---
+
+## Session Start
+
+Do this silently at the start of every session:
+
+1. Check `tasks/active/` — if there's an in-progress task, resume from "Last Checkpoint"
+2. For terminal/server/system work, load the sysadmin module (see Modules)
+
+---
+
+## Session End
+
+1. If mid-task: update "Last Checkpoint" in the current task file
+2. If task completed: move to `tasks/done/` (see Task File Management)
+3. Stage changes and show `git diff --cached` for review before committing:
+
+```bash
+git add tasks/ docs/ platforms/ scripts/ servers/ modules/ \
+        CLAUDE.md SYSTEM.example.md _memory_template.md \
+        .claude/settings.json .cursor/rules/
+git diff --cached            # review before committing
+git commit -m "<message>"    # on the user's go-ahead
+```
+
+---
+
+## Communication
+
+- Respond to user in **Russian**
+- All docs, task files, code comments: **English**
+
+---
+
+## Workflow Protocol
+
+### Simple task → execute directly, report what was done.
+
+Simple = single file/command, instantly reversible. Example: fix a typo, add an alias, mark `[x]`.
+
+### Complex task → 3 phases, never skip.
+
+Complex = any of: more than one step, hard to undo, affects other files/tools, architectural, cross-project.
+
+#### Phase 1 — Analyze
+- Map full scope: what files change and why (apply *Think before coding*)
+- Identify irreversible steps and risks
+- Check for hidden dependencies or gaps
+- Present findings to user
+
+#### Phase 2 — Confirm + Plan
+- Wait for explicit go-ahead ("да", "давай", "go", "ok", etc.)
+- If user adds feedback → back to Phase 1
+- On approval, scale the artifacts to the work (don't over-ceremony):
+  - **Task file** (`tasks/active/YYYYMMDD_task-name.md`) when the work may span sessions or grow large — it enables checkpoint resume. Skip it for a quick multi-step change done in one sitting.
+  - **Rollback plan** inside the task file only when changes are hard to undo (system changes, anything outside git). Reversible code changes (behind git) don't need one.
+
+#### Phase 3 — Implement + Verify
+- Execute step by step, mark `[x]` as you go
+- After each significant change: verify consistency (*Surgical changes*, principle #3)
+- Verify the success criterion before reporting "done" (*Goal-driven*)
+- If session ends mid-task: update "Last Checkpoint"
+
+---
+
+## Task File Management
+
+```
+tasks/active/YYYYMMDD_task-name.md    ← in-progress
+tasks/done/YYYYMMDD_task-name.md      ← completed
+tasks/_template.md                    ← copy to start
+```
+
+States: `[ ]` pending · `[~]` in progress · `[x]` done
+
+Move to `done/` only after **explicit user confirmation** — never autonomously.
+
+---
+
+## Secrets
+
+**Never in tracked files** — not even in comments, not even "temporarily." Use `.env` (gitignored); document variable names in `.env.example`. Scan `git diff --cached` before every commit.
+
+---
+
+## Git Workflow
+
+- Format: short imperative, lowercase (`add nginx config`, `fix ssh keychain`)
+- Phase done: `Phase N: <deliverable>`
+- Mid-task: `wip: <task-name> — <step>`
+- Rules changed: `rules: <what changed>`
+- If `CLAUDE.md` or `modules/*.md` changed: run `./scripts/sync-rules.sh` (regenerates all `.cursor/rules/`)
+- Before committing: review `git diff --cached`
+- **Never commit or push automatically** — only when the user explicitly requests it
+- Confirm before any destructive git operation (reset, force push, branch delete)
